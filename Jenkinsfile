@@ -3,21 +3,21 @@ pipeline{
 
   stages{
     stage ("Git Pull ") {
-        steps{
+        steps {
            script {
              
            } 
         }      
     }
     stage ("Docker build ") {
-        steps{
+        steps {
            script {
              
            } 
         }      
     }    
     stage ("Docker Push ") {
-        steps{
+        steps {
            script {
              
            } 
