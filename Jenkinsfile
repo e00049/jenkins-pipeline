@@ -6,19 +6,23 @@ pipeline {
             steps {
                 git branch: 'dev', credentialsId: 'gitlab', url: 'https://github.com/e00049/jenkins-pipeline.git'
             }
-        }        
-        stage('Read Properties') {
+        }
+
+        stage("Docker Build and Push") {
             steps {
                 script {
-                    def properties = readProperties file: 'config.properties'
+                    def configFile = readProperties file: "config.properties"
+                    def dockerBuild = configFile['docker-build']
 
-                    def property1 = properties['key1']
-                    def property2 = properties['key2']
-
-                    echo "Property 1: ${property1}"
-                    echo "Property 2: ${property2}"
+                    if (dockerBuild == "yes") {
+                        echo "Performing Docker build"
+                        // Add your Docker build steps here
+                    } else {
+                        echo "Skipped Docker Build"                            
+                    }
                 }
             }
-        }
+        }   
     }
 }
+
