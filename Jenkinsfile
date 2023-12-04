@@ -1,5 +1,5 @@
-pipeline{
-  agant {label  "worker1" }
+pipeline {
+  agant any
 
   stages{
     stage ("Git Pull ") {
