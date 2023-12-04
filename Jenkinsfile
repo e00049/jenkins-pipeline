@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    // Uncomment this block if you need Docker Hub credentials
+    // environment {
+    //   DOCKERHUB_CREDENTIALS = credentials('docker-hub-e00049')
+    // }
+
     stages {
         stage("SCM-Git-Preparation") {
             steps {
@@ -22,9 +27,9 @@ pipeline {
         stage("Docker Build and Push") {
             steps {
                 script {
-                    def readProps = readProperties file: 'config.properties'
-                    def scmPreparation = readProps['scm-preparation']
-                    def dockerBuild = readProps['docker-build']
+                    def configFile = load "config.properties"
+                    def scmPreparation = configFile['scm-preparation']
+                    def dockerBuild = configFile['docker-build']
 
                     if (scmPreparation == "yes") {
                         echo "Performing SCM Preparation"
@@ -41,6 +46,6 @@ pipeline {
                     }
                 }
             }
-        }
+        }   
     }
 }
