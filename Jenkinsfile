@@ -14,8 +14,9 @@ pipeline {
         stage('SCM Preparation Stage') {
             steps {
                 script {
-                    def readProb = readProperties file: 'config.properties'
-                    if ("${readProb['scm-preparation']}" == "yes") {                    
+                    def readProps = readProperties file: 'config.properties'
+                    def scmPreparation = readProps['scm-preparation']
+                    if (scmPreparation == "yes") {                    
                         echo "Performing SCM Preparation"
                         // Add your SCM preparation steps here
                     } else {
@@ -28,8 +29,9 @@ pipeline {
         stage('Docker build Stage') {
             steps {
                 script {
-                    def readProb = readProperties file: 'config.properties'
-                    if ("${readProb['docker-build']}" == "yes") {                    
+                    def readProps = readProperties file: 'config.properties'
+                    def dockerBuild = readProps['docker-build']
+                    if (dockerBuild == "yes") {                    
                         echo "Performing Docker build"
                         // Add your Docker build steps here
                     } else {
