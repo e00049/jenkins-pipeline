@@ -1,35 +1,42 @@
 pipeline {
     agent any
 
-    // Uncomment this block if you need Docker Hub credentials
-    // environment {
-    //   DOCKERHUB_CREDENTIALS = credentials('docker-hub-e00049')
-    // }
-
     stages {
-        stage("SCM-Git-Preparation") {
+        stage('Git Pull') {
             steps {
                 script {
-                    sh ''' 
-                        git config --global user.name e00049
-                        git config --global user.email e00049.02aug2021@gmail.com 
-                    '''
+                    echo "Checking out code from the repository"
+                    git branch: 'dev', credentialsId: 'gitlab', url: 'https://github.com/e00049/jenkins-pipeline.git'
                 }
             }
         }
 
-        stage('GIT Pull') {
-            steps {
-                git branch: 'dev', credentialsId: 'gitlab', url: 'https://github.com/e00049/jenkins-pipeline.git'
-            }
-        }
-
-        stage("Docker Build and Push") {
+        stage('SCM Preparation Stage') {
             steps {
                 script {
-                    sh '''
-                        echo "Hello world"
-                    '''
+                    def readProps = readProperties file: 'config.properties'
+                    def scmPreparation = readProps['scm-preparation']
+                    if (scmPreparation == "yes") {                    
+                        echo "Performing SCM Preparation"
+                        // Add your SCM preparation steps here
+                    } else {
+                        echo "Skipped SCM Preparation"                            
+                    }
+                }
+            }
+        }  
+
+        stage('Docker build Stage') {
+            steps {
+                script {
+                    def readProps = readProperties file: 'config.properties'
+                    def dockerBuild = readProps['docker-build']
+                    if (dockerBuild == "yes") {                    
+                        echo "Performing Docker build stage 00000000003"
+                        // Add your Docker build steps here
+                    } else {
+                        echo "Skipped Docker Build"                            
+                    }
                 }
             }
         }
