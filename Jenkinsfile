@@ -2,6 +2,11 @@ pipeline {
     agent any
 
     stages {
+        stage('GIT Pull') {
+            steps {
+                git branch: 'dev', credentialsId: 'gitlab', url: 'https://github.com/e00049/jenkins-pipeline.git'
+            }
+        }        
         stage('Read Properties') {
             steps {
                 script {
